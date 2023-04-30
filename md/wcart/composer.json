@@ -1,0 +1,26 @@
+{
+    "name": "mohammad/wcart",
+    "autoload": {
+        "psr-4": {
+            "Mohammad\\Wcart\\": "packages/md/wcart/src"
+        }
+    },
+    "authors": [
+        {
+            "name": "Mohammad",
+            "email": "mohammadmghig@gmail.com"
+        }
+    ],
+    "require": {},
+
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Md\\Wcart\\CartServiceProvider"
+            ],
+            "aliases": {
+                "Cart": "Md\\Wcart\\Facade\\Cart"
+            }
+        }
+    }
+}
