@@ -3,8 +3,11 @@
 return [
     'database' =>[
         'conection' => null,
-        'table' => 'mdCart'
+        'table' => 'shoppingcart'
     ],
 
  
+    'cart.db.table' => 'shoppingCart'
+
+
 ];

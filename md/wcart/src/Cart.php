@@ -6,6 +6,7 @@ use Illuminate\Bus\Dispatcher;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Session\SessionManager;
+use PSpell\Config;
 
 class Cart{
     public $SESSION_NAME ="cart";
@@ -112,6 +113,7 @@ class Cart{
     }
 
     public function get($id){
+ 
         $currentSession = $this->getCurrentSession();
         $result = [];
         foreach($currentSession as $key=>$item){
@@ -141,7 +143,17 @@ class Cart{
         return $result;
     }
 
+    public function tableName(){
+        return Config('cart.db..table' , 'shoppingCart');
+    }
+
+
+    public function storeDb(){
+
+    }
    
+
+    
 
     public function setTax($id , $taxRate){
         $item = $this->get($id);
