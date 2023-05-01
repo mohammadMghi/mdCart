@@ -24,6 +24,7 @@ class Cart{
             "nama_product" => $productName,
             "price" => $price,
             "qty" => $qty,
+       
         );
   
         foreach($currentSession as $key=>$item){
@@ -76,6 +77,15 @@ class Cart{
  
     }
 
+    public function countAll(){
+        $currentSession = $this->getCurrentSession();
+        $total = 0 ;
+        foreach($currentSession as $key=>$item){
+            $total = $total  + $item['qty'];
+        }
+        
+        return $total;
+    }
 
     public function updateQty($id , $newQty){
         $currentSession = $this->getCurrentSession();
@@ -102,7 +112,15 @@ class Cart{
     }
 
     public function get($id){
-        return $this->sessionManager->get($this->SESSION_NAME , $id) ;
+        $currentSession = $this->getCurrentSession();
+        $result = [];
+        foreach($currentSession as $key=>$item){
+            if($item['id'] == $id){
+                $result = $item;
+            }
+        }
+
+        return $result;
     }
 
     public function total(){
@@ -117,10 +135,34 @@ class Cart{
         return $total;
     }
 
+    public function searchByID($id){
+        $currentSession = $this->getCurrentSession();
+        $result = array_search($id,$currentSession);
+        return $result;
+    }
+
    
 
-    public function setTax(){
+    public function setTax($id , $taxRate){
+        $item = $this->get($id);
+        $currentSession = $this->getCurrentSession();
+        if(is_numeric($taxRate)){
+   
+            $tax = $item['price'] / $taxRate;
+            $item['price'] = $item['price'] + $tax;
+            unset($currentSession[$item['id']]);
+            array_push($currentSession , $item);
 
+            $this->sessionManager->put('cart' , $currentSession );
+ 
+            $this->sessionManager->flash('cart'  , $currentSession);
+            return;
+        }else{
+
+            //throw exception
+ 
+        }
+        return;
     }
 
     public function all(){
@@ -137,5 +179,10 @@ class Cart{
  
         }
         return [];
+    }
+
+    public function toJson(){
+        $currentSession = $this->getCurrentSession();
+        return json_decode($currentSession);
     }
 }
