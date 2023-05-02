@@ -14,10 +14,12 @@ class CreateShoppingcartTable extends Migration
     {
         Schema::create(config('cart.db.table'), function (Blueprint $table) {
             $table->string('id');
-            $table->string('cart');
+            $table->string('price');
+            $table->string('product_name');
+            $table->string('qty');
             $table->nullableTimestamps();
 
-            $table->primary(['id', 'cart']);
+            $table->primary(['id']);
         });
     }
     /**

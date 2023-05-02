@@ -3,8 +3,8 @@
 namespace Md\Wcart;
 
 
-class Greetr{
+class TestClass{
     public function greet(){
-        return 'Hi';
+        return 'test';
     }
 }

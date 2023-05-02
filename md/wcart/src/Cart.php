@@ -2,6 +2,7 @@
 
 namespace Md\Wcart;
 
+ 
 use Illuminate\Bus\Dispatcher;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Database\Eloquent\Collection;
@@ -10,10 +11,11 @@ use PSpell\Config;
 
 class Cart{
     public $SESSION_NAME ="cart";
-
+    public Database $db;
     protected SessionManager $sessionManager;
-    public function __construct(SessionManager $sessionManager ){
+    public function __construct(SessionManager $sessionManager , Database $db){
         $this->sessionManager = $sessionManager;
+        $this->db = $db;
     }
 
     public function add($id , $productName = null, $qty = null , $price =null ){
@@ -144,14 +146,37 @@ class Cart{
     }
 
     public function tableName(){
-        return Config('cart.db..table' , 'shoppingCart');
+        return Config('cart.db.table' , 'shoppingCart');
     }
 
 
-    public function storeDb(){
+    public function storeDbById($cartId){
+        if($this->cartExsitedInDb($cartId)){
+            return ;
+        }
+ 
+
+        $cartById = $this->get($cartId);
+
+
+
+         $this->db->connection()->table($this->tableName())
+            ->insert([ 
+                "id" => $cartId,
+                "nama_product" => $cartById->product_name,
+                "price" => $cartById->price,
+                "qty" => $cartById->qty,
+            
+            ])->store();
 
     }
+
+ 
    
+
+    public function cartExsitedInDb($cartId){
+        return $this->db->connection()->table($this->tableName())->where('id', $cartId)->exists();    
+    }
 
     
 
