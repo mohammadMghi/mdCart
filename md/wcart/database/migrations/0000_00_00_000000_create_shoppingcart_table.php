@@ -12,14 +12,14 @@ class CreateShoppingcartTable extends Migration
      */
     public function up()
     {
-        Schema::create(config('cart.db.table'), function (Blueprint $table) {
-            $table->string('id');
+        Schema::create('md_cart', function (Blueprint $table) {
+            $table->string('cart_id');
             $table->string('price');
             $table->string('product_name');
             $table->string('qty');
             $table->nullableTimestamps();
 
-            $table->primary(['id']);
+            $table->primary(['cart_id']);
         });
     }
     /**
@@ -27,6 +27,6 @@ class CreateShoppingcartTable extends Migration
      */
     public function down()
     {
-        Schema::drop(config('cart.db.table'));
+        Schema::drop('md_cart');
     }
 }

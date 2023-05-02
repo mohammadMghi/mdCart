@@ -2,12 +2,12 @@
 
 return [
     'database' =>[
-        'conection' => null,
-        'table' => 'shoppingcart'
+        'conection' => 'myCart',
+        'table' => 'md_cart'
     ],
 
  
-    'cart.db.table' => 'shoppingCart'
+    'dbName' => 'md_cart'
 
 
 ];

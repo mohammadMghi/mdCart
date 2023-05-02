@@ -11,5 +11,6 @@ class Database{
 
     public function connection(){
         return app(DatabaseManager::class)->connection($this->connectionName);
+ 
     }
 }

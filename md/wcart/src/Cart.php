@@ -7,15 +7,20 @@ use Illuminate\Bus\Dispatcher;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Session\SessionManager;
+use Md\Wcart\Exceptions\CartExistedException;
 use PSpell\Config;
 
 class Cart{
     public $SESSION_NAME ="cart";
     public Database $db;
     protected SessionManager $sessionManager;
-    public function __construct(SessionManager $sessionManager , Database $db){
+    public function __construct(SessionManager $sessionManager  ){
         $this->sessionManager = $sessionManager;
-        $this->db = $db;
+        $this->db = new Database($this->dbName());
+    }
+
+    public function dbName(){
+        return Config('cart.database.myCart');
     }
 
     public function add($id , $productName = null, $qty = null , $price =null ){
@@ -146,36 +151,38 @@ class Cart{
     }
 
     public function tableName(){
-        return Config('cart.db.table' , 'shoppingCart');
+        return "md_cart";
     }
 
 
     public function storeDbById($cartId){
         if($this->cartExsitedInDb($cartId)){
-            return ;
+            throw new CartExistedException("This is exsited ID = "  . $cartId) ;
         }
  
 
         $cartById = $this->get($cartId);
-
+        dump($cartById);
 
 
          $this->db->connection()->table($this->tableName())
             ->insert([ 
-                "id" => $cartId,
-                "nama_product" => $cartById->product_name,
-                "price" => $cartById->price,
-                "qty" => $cartById->qty,
+                "cart_id" => $cartId,
+                "product_name" => $cartById['nama_product'],
+                "price" => $cartById['price'],
+                "qty" => $cartById['qty'],
             
-            ])->store();
+            ]);
 
     }
+
+    
 
  
    
 
     public function cartExsitedInDb($cartId){
-        return $this->db->connection()->table($this->tableName())->where('id', $cartId)->exists();    
+        return $this->db->connection()->table($this->tableName())->where('cart_id', $cartId)->exists();    
     }
 
     
