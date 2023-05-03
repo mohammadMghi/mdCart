@@ -175,8 +175,18 @@ class Cart{
             ]);
 
     }
+ 
+    public function deleteFromDbById($cartId)
+    {
 
-    
+        if(!$this->cartExsitedInDb($cartId)){
+            return false;
+        }
+
+        $this->db->connection()->table($this->tableName())
+            ->where('cart_id', $cartId)->delete();
+        return true;
+    }
 
  
    
